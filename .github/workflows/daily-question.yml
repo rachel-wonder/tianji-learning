@@ -2,8 +2,8 @@ name: Generate Daily Question (Claude Agent SDK)
 
 on:
   schedule:
-    # Runs at 8:00 AM UTC every day (4:00 PM Beijing Time)
-    - cron: '0 8 * * *'
+    # Runs at 7:00 PM UTC every day (3:00 AM Beijing Time next day)
+    - cron: '0 19 * * *'
   workflow_dispatch:  # Allow manual trigger for testing
 
 permissions:
