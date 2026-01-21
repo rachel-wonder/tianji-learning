@@ -518,13 +518,13 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
                             <div class="resource-detail">天纪第 {module['episode']} 集</div>
                         </div>
                     </a>
-                    <div class="resource-link">
+                    <a href="天机道教材.pdf" target="_blank" rel="noopener" class="resource-link">
                         <span class="resource-icon">📚</span>
                         <div class="resource-info">
                             <div class="resource-title">阅读教材</div>
                             <div class="resource-detail">天机道 第 {module['textbook_pages']} 页</div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
