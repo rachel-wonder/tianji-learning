@@ -1,4 +1,5 @@
 # 天纪每日学习系统
+https://rachel-wonder.github.io/tianji-learning/
 
 基于费曼学习法的自动化学习系统，每日一问，你教给你的AI。把【视频时间戳】和【教材对应内容】关联起来，知识点不迷路。
 
