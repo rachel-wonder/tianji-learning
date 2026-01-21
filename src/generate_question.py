@@ -608,6 +608,245 @@ def archive_today(html_content, archive_path=ARCHIVE_PATH):
     print(f"Archived: {archive_file}")
 
 
+def generate_archive_index(modules, archive_path=ARCHIVE_PATH):
+    """Generate an index page showing all archived daily questions."""
+    archive_dir = Path(archive_path)
+    if not archive_dir.exists():
+        return
+
+    # Get all archived files with their metadata
+    archive_entries = []
+    for file in sorted(archive_dir.glob("*.html"), reverse=True):
+        date_str = file.stem
+        try:
+            date_obj = datetime.fromisoformat(date_str)
+
+            # Calculate which module was shown on that date
+            start = datetime.fromisoformat(os.getenv("START_DATE", "2026-01-21"))
+            days_elapsed = (date_obj - start).days
+            if days_elapsed < 0:
+                days_elapsed = 0
+            module_index = days_elapsed % len(modules)
+            module = modules[module_index]
+
+            archive_entries.append({
+                "date": date_str,
+                "date_display": date_obj.strftime("%Y年%m月%d日"),
+                "weekday": date_obj.strftime("%A"),
+                "module_id": module['id'],
+                "module_title": module['title'],
+                "episode": module['episode'],
+                "url": f"{date_str}.html"
+            })
+        except ValueError:
+            continue
+
+    # Build archive entries HTML
+    entries_html = ""
+    for entry in archive_entries:
+        entries_html += f'''
+        <div class="archive-card">
+            <div class="archive-date">
+                <div class="date-large">{entry['date_display']}</div>
+                <div class="date-small">{entry['weekday']}</div>
+            </div>
+            <div class="archive-content">
+                <div class="module-badge">模块 {entry['module_id']}</div>
+                <h3 class="archive-title">{entry['module_title']}</h3>
+                <div class="archive-meta">第 {entry['episode']} 集</div>
+            </div>
+            <a href="{entry['url']}" class="archive-link">查看详情 →</a>
+        </div>
+        '''
+
+    # Generate index HTML
+    index_html = f'''<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天纪学习历史记录 - 所有学习内容</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {{
+            --color-primary: #8B4513;
+            --color-primary-light: #A0522D;
+            --color-secondary: #2F4F4F;
+            --color-accent: #CD853F;
+            --color-background: #FDF5E6;
+            --color-surface: #FFFAF0;
+            --color-text: #333333;
+            --color-text-light: #666666;
+            --color-border: #DEB887;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }}
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+        body {{
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--color-text);
+            background-color: var(--color-background);
+            min-height: 100vh;
+        }}
+        .container {{ max-width: 1000px; margin: 0 auto; padding: 24px 20px 48px; }}
+        header {{
+            text-align: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid var(--color-border);
+        }}
+        .site-title {{
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }}
+        .site-subtitle {{ font-size: 0.95rem; color: var(--color-text-light); margin-bottom: 16px; }}
+        .back-link {{
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--color-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }}
+        .back-link:hover {{ background: var(--color-primary-light); }}
+        .stats {{
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 32px;
+            padding: 20px;
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }}
+        .stat-item {{ text-align: center; }}
+        .stat-number {{
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            font-family: 'Noto Serif SC', serif;
+        }}
+        .stat-label {{ font-size: 0.9rem; color: var(--color-text-light); margin-top: 4px; }}
+        .archive-grid {{ display: grid; gap: 20px; }}
+        .archive-card {{
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 20px;
+            align-items: center;
+            padding: 20px 24px;
+            background: var(--color-surface);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+        }}
+        .archive-card:hover {{
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }}
+        .archive-date {{ text-align: center; min-width: 120px; }}
+        .date-large {{
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }}
+        .date-small {{ font-size: 0.85rem; color: var(--color-text-light); }}
+        .archive-content {{ flex: 1; }}
+        .module-badge {{
+            display: inline-block;
+            padding: 2px 10px;
+            background: var(--color-accent);
+            color: white;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+        }}
+        .archive-title {{
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-secondary);
+            margin-bottom: 4px;
+        }}
+        .archive-meta {{ font-size: 0.9rem; color: var(--color-text-light); }}
+        .archive-link {{
+            padding: 8px 16px;
+            background: var(--color-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }}
+        .archive-link:hover {{ background: var(--color-primary-light); }}
+        footer {{
+            text-align: center;
+            padding-top: 32px;
+            margin-top: 32px;
+            color: var(--color-text-light);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--color-border);
+        }}
+        @media (max-width: 768px) {{
+            .archive-card {{
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }}
+            .archive-date {{ text-align: left; }}
+            .stats {{ flex-direction: column; gap: 16px; }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="site-title">天纪学习历史记录</h1>
+            <p class="site-subtitle">所有每日学习内容汇总</p>
+            <a href="../index.html" class="back-link">← 返回今日学习</a>
+        </header>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">{len(archive_entries)}</div>
+                <div class="stat-label">学习天数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{len(modules)}</div>
+                <div class="stat-label">学习模块</div>
+            </div>
+        </div>
+
+        <div class="archive-grid">
+            {entries_html}
+        </div>
+
+        <footer>
+            <p>天纪每日学习系统 · 基于费曼学习法设计</p>
+            <p style="margin-top: 8px;">🤖 Powered by Claude Agent SDK</p>
+        </footer>
+    </div>
+</body>
+</html>'''
+
+    # Save index file
+    index_file = archive_dir / "index.html"
+    with open(index_file, 'w', encoding='utf-8') as f:
+        f.write(index_html)
+    print(f"Generated archive index: {index_file}")
+
+
 async def main():
     """Main function using Claude Agent SDK."""
     print("=" * 50)
@@ -650,6 +889,10 @@ async def main():
 
     # Archive today's question
     archive_today(html_content)
+
+    # Generate archive index page
+    print("\n正在生成历史记录索引页面...")
+    generate_archive_index(modules)
 
     print("\n" + "=" * 50)
     print("生成完成！(Powered by Claude Agent SDK)")
