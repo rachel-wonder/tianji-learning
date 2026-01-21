@@ -148,21 +148,6 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
     for concept in module['key_concepts']:
         concepts_html += f'<span class="concept-tag">{concept}</span>\n'
 
-    # Build archive section HTML
-    archive_section = ""
-    if archived_dates:
-        archive_section = f'''
-        <div class="archive-section">
-            <div class="archive-header">
-                <span class="archive-title">历史学习记录</span>
-                <select class="archive-select" onchange="goToArchive(this.value)">
-                    <option value="">选择日期...</option>
-                    {archive_options}
-                </select>
-            </div>
-        </div>
-        '''
-
     html = f'''<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -201,27 +186,61 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
         }}
         .container {{ max-width: 800px; margin: 0 auto; padding: 24px 20px 48px; }}
         header {{
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 32px;
             padding-bottom: 24px;
             border-bottom: 2px solid var(--color-border);
         }}
-        .site-title {{
-            font-family: 'Noto Serif SC', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--color-primary);
-            margin-bottom: 8px;
+        .header-left {{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }}
-        .site-subtitle {{ font-size: 0.95rem; color: var(--color-text-light); }}
-        .date-display {{
-            display: inline-block;
-            margin-top: 16px;
-            padding: 8px 20px;
-            background: var(--color-surface);
+        .header-nav {{
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }}
+        .archive-btn {{
+            padding: 10px 20px;
+            background: white;
+            color: var(--color-text);
             border: 1px solid var(--color-border);
+            text-decoration: none;
             border-radius: var(--radius-sm);
             font-size: 0.9rem;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            cursor: pointer;
+            width: 160px;
+            text-align: center;
+            display: inline-block;
+            box-sizing: border-box;
+            height: 40px;
+            line-height: 18px;
+        }}
+        .archive-btn:hover {{
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }}
+        .site-title {{
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin: 0;
+        }}
+        .site-subtitle {{
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            margin: 0;
+        }}
+        .date-display {{
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            margin-top: 4px;
         }}
         .ai-tip {{
             background: linear-gradient(135deg, #e8f4f8, #f0f8ff);
@@ -426,13 +445,25 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
         }}
         .archive-title {{ font-weight: 600; color: var(--color-secondary); }}
         .archive-select {{
-            padding: 10px 16px;
+            padding: 10px 20px;
             border: 1px solid var(--color-border);
             border-radius: var(--radius-sm);
             background: white;
             font-size: 0.9rem;
             cursor: pointer;
-            min-width: 180px;
+            width: 160px;
+            height: 40px;
+            transition: all 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 32px;
+            box-sizing: border-box;
+            line-height: 18px;
+        }}
+        .archive-select:hover {{
+            border-color: var(--color-primary);
         }}
         footer {{
             text-align: center;
@@ -455,20 +486,40 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
         }}
         @media (max-width: 600px) {{
             .container {{ padding: 16px 16px 32px; }}
+            header {{
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }}
+            .header-nav {{
+                width: 100%;
+                justify-content: flex-end;
+            }}
             .site-title {{ font-size: 1.6rem; }}
             .module-title {{ font-size: 1.25rem; }}
             .question-text {{ font-size: 1.1rem; padding: 16px; }}
             .card-header, .card-body {{ padding: 20px; }}
             .module-meta {{ flex-direction: column; gap: 8px; }}
+            .archive-select {{ width: 120px; }}
+            .archive-btn {{ width: 120px; }}
         }}
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1 class="site-title">天纪每日学习</h1>
-            <p class="site-subtitle">倪海厦天纪课程 · 费曼学习法 · Claude AI增强</p>
-            <div class="date-display">{today_display}</div>
+            <div class="header-left">
+                <h1 class="site-title">天纪每日学习</h1>
+                <p class="site-subtitle">倪海厦天纪课程 · 费曼学习法 · Claude AI增强</p>
+                <div class="date-display">{today_display}</div>
+            </div>
+            <div class="header-nav">
+                <a href="archive/index.html" class="archive-btn">📚 历史记录</a>
+                <select class="archive-select" onchange="goToArchive(this.value)">
+                    <option value="">📅 选择日期</option>
+                    {archive_options}
+                </select>
+            </div>
         </header>
 
         <div class="motivation">「{enhanced_content.get('motivation', '学无止境，温故知新。')}」</div>
@@ -543,8 +594,6 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
                 </div>
             </div>
         </div>
-
-        {archive_section}
 
         <footer>
             <p>基于费曼学习法设计 · 生成于 {generation_time}</p>
