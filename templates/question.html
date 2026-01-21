@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天纪每日学习 - {{ module.title }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #8B4513;
+            --color-primary-light: #A0522D;
+            --color-secondary: #2F4F4F;
+            --color-accent: #CD853F;
+            --color-background: #FDF5E6;
+            --color-surface: #FFFAF0;
+            --color-text: #333333;
+            --color-text-light: #666666;
+            --color-border: #DEB887;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--color-text);
+            background-color: var(--color-background);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px 20px 48px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .site-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            letter-spacing: 0.05em;
+        }
+
+        .site-subtitle {
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+        }
+
+        .date-display {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 8px 20px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            color: var(--color-secondary);
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            margin-bottom: 32px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--color-border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Main Card */
+        .question-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            margin-bottom: 32px;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+            color: white;
+            padding: 24px 28px;
+        }
+
+        .module-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+
+        .module-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .module-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-body {
+            padding: 28px;
+        }
+
+        /* Question Section */
+        .question-section {
+            margin-bottom: 28px;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .question-text {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.25rem;
+            line-height: 1.9;
+            color: var(--color-secondary);
+            padding: 20px;
+            background: var(--color-background);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--color-primary);
+        }
+
+        /* Key Concepts */
+        .concepts-section {
+            margin-bottom: 28px;
+        }
+
+        .concepts-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .concept-tag {
+            padding: 8px 16px;
+            background: var(--color-background);
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--color-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .concept-tag:hover {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Teaching Back Prompt */
+        .prompt-section {
+            background: #F5F5F0;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .prompt-title {
+            font-weight: 600;
+            color: var(--color-secondary);
+        }
+
+        .copy-btn {
+            padding: 8px 16px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--color-primary-light);
+            transform: translateY(-1px);
+        }
+
+        .copy-btn.copied {
+            background: #2E7D32;
+        }
+
+        .prompt-content {
+            font-family: 'Noto Sans SC', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            color: var(--color-text);
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--color-border);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* Resources */
+        .resources-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .resource-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--color-background);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--color-text);
+            transition: all 0.2s ease;
+        }
+
+        .resource-link:hover {
+            border-color: var(--color-primary);
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
+        }
+
+        .resource-icon {
+            font-size: 1.5rem;
+        }
+
+        .resource-info {
+            flex: 1;
+        }
+
+        .resource-title {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .resource-detail {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+        }
+
+        /* Archive Section */
+        .archive-section {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 24px 28px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .archive-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .archive-title {
+            font-weight: 600;
+            color: var(--color-secondary);
+        }
+
+        .archive-select {
+            padding: 10px 16px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            background: white;
+            font-size: 0.9rem;
+            color: var(--color-text);
+            cursor: pointer;
+            min-width: 180px;
+        }
+
+        .archive-select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding-top: 32px;
+            color: var(--color-text-light);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 16px 16px 32px;
+            }
+
+            .site-title {
+                font-size: 1.6rem;
+            }
+
+            .module-title {
+                font-size: 1.25rem;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+                padding: 16px;
+            }
+
+            .card-header, .card-body {
+                padding: 20px;
+            }
+
+            .prompt-section {
+                padding: 16px;
+            }
+
+            .module-meta {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1 class="site-title">天纪每日学习</h1>
+            <p class="site-subtitle">倪海厦天纪课程 · 费曼学习法</p>
+            <div class="date-display">{{ today_display }}</div>
+        </header>
+
+        <!-- Progress -->
+        <div class="progress-section">
+            <div class="progress-header">
+                <span>学习进度</span>
+                <span>第 {{ current_num }} / {{ total_num }} 模块</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ progress_percent }}%"></div>
+            </div>
+        </div>
+
+        <!-- Main Question Card -->
+        <div class="question-card">
+            <div class="card-header">
+                <div class="module-badge">模块 {{ module.id }}</div>
+                <h2 class="module-title">{{ module.title }}</h2>
+                <div class="module-meta">
+                    <span class="meta-item">
+                        <span>📺</span>
+                        <span>第 {{ module.episode }} 集</span>
+                    </span>
+                    <span class="meta-item">
+                        <span>📖</span>
+                        <span>教材第 {{ module.textbook_pages }} 页</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <!-- Today's Question -->
+                <div class="question-section">
+                    <div class="section-label">今日学习问题</div>
+                    <div class="question-text">{{ module.question }}</div>
+                </div>
+
+                <!-- Key Concepts -->
+                <div class="concepts-section">
+                    <div class="section-label">核心概念</div>
+                    <div class="concepts-grid">
+                        {% for concept in module.key_concepts %}
+                        <span class="concept-tag">{{ concept }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Teaching Back Prompt -->
+                <div class="prompt-section">
+                    <div class="prompt-header">
+                        <span class="prompt-title">教回提示词 (Feynman Technique)</span>
+                        <button class="copy-btn" onclick="copyPrompt()">复制提示词</button>
+                    </div>
+                    <div class="prompt-content" id="prompt-text">{{ module.prompt_template }}</div>
+                </div>
+
+                <!-- Resources -->
+                <div class="resources-section">
+                    <a href="{{ module.video_url }}" target="_blank" rel="noopener" class="resource-link">
+                        <span class="resource-icon">🎬</span>
+                        <div class="resource-info">
+                            <div class="resource-title">观看视频</div>
+                            <div class="resource-detail">天纪第 {{ module.episode }} 集</div>
+                        </div>
+                    </a>
+                    <div class="resource-link">
+                        <span class="resource-icon">📚</span>
+                        <div class="resource-info">
+                            <div class="resource-title">阅读教材</div>
+                            <div class="resource-detail">天机道 第 {{ module.textbook_pages }} 页</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Archive Section -->
+        {% if archived_dates %}
+        <div class="archive-section">
+            <div class="archive-header">
+                <span class="archive-title">历史学习记录</span>
+                <select class="archive-select" onchange="goToArchive(this.value)">
+                    <option value="">选择日期...</option>
+                    {% for item in archived_dates %}
+                    <option value="{{ item.url }}">{{ item.display }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Footer -->
+        <footer>
+            <p>基于费曼学习法设计 · 自动生成于 {{ generation_time }}</p>
+            <p style="margin-top: 8px;">
+                <a href="https://github.com/YOUR_USERNAME/tianji-learning" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        function copyPrompt() {
+            const promptText = document.getElementById('prompt-text').textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '已复制!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '复制提示词';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = promptText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '已复制!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '复制提示词';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function goToArchive(url) {
+            if (url) {
+                window.location.href = url;
+            }
+        }
+    </script>
+</body>
+</html>
