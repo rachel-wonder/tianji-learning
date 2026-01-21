@@ -131,6 +131,35 @@ async def generate_enhanced_content(module, current_num, total_num):
     return enhanced_content
 
 
+def parse_prompt_template(template):
+    """
+    Parse prompt template and create HTML with editable textareas for bracketed placeholders.
+    Returns HTML string with textareas for user input.
+    """
+    import re
+
+    # Split template by bracketed placeholders like [在这里写下...]
+    parts = re.split(r'(\[.*?\])', template)
+
+    html_parts = []
+    textarea_id = 0
+
+    for part in parts:
+        if part.startswith('[') and part.endswith(']'):
+            # This is a placeholder - create a textarea
+            placeholder_text = part[1:-1]  # Remove brackets
+            html_parts.append(
+                f'<textarea class="prompt-textarea" id="user-input-{textarea_id}" '
+                f'placeholder="{placeholder_text}"></textarea>'
+            )
+            textarea_id += 1
+        elif part.strip():
+            # This is static text
+            html_parts.append(f'<div class="prompt-static">{part}</div>')
+
+    return ''.join(html_parts)
+
+
 def generate_html(module, current_num, total_num, archived_dates, today_date, enhanced_content):
     """Generate HTML content with enhanced AI-generated content."""
 
@@ -147,6 +176,9 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
     concepts_html = ""
     for concept in module['key_concepts']:
         concepts_html += f'<span class="concept-tag">{concept}</span>\n'
+
+    # Parse prompt template to create interactive HTML
+    prompt_html = parse_prompt_template(module['prompt_template'])
 
     html = f'''<!DOCTYPE html>
 <html lang="zh-CN">
@@ -406,6 +438,29 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
             max-height: 300px;
             overflow-y: auto;
         }}
+        .prompt-textarea {{
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text);
+            background: #fffef8;
+            border: 2px solid var(--color-accent);
+            border-radius: var(--radius-sm);
+            resize: vertical;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }}
+        .prompt-textarea:focus {{
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+        }}
+        .prompt-static {{
+            margin: 8px 0;
+        }}
         .resources-section {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -573,7 +628,7 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
                         <span class="prompt-title">教回提示词 (Feynman Technique)</span>
                         <button class="copy-btn" onclick="copyPrompt()">复制提示词</button>
                     </div>
-                    <div class="prompt-content" id="prompt-text">{module['prompt_template']}</div>
+                    <div class="prompt-content" id="prompt-container">{prompt_html}</div>
                 </div>
 
                 <div class="resources-section">
@@ -603,7 +658,29 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
 
     <script>
         function copyPrompt() {{
-            const promptText = document.getElementById('prompt-text').textContent;
+            // Collect all content from the prompt container
+            const container = document.getElementById('prompt-container');
+            const staticDivs = container.querySelectorAll('.prompt-static');
+            const textareas = container.querySelectorAll('.prompt-textarea');
+
+            // Build the complete prompt text
+            let promptText = '';
+            const allElements = Array.from(container.children);
+
+            allElements.forEach(element => {{
+                if (element.classList.contains('prompt-static')) {{
+                    promptText += element.textContent;
+                }} else if (element.classList.contains('prompt-textarea')) {{
+                    const userInput = element.value.trim();
+                    if (userInput) {{
+                        promptText += userInput;
+                    }} else {{
+                        promptText += '[' + element.placeholder + ']';
+                    }}
+                }}
+            }});
+
+            // Copy to clipboard
             navigator.clipboard.writeText(promptText).then(() => {{
                 const btn = document.querySelector('.copy-btn');
                 btn.textContent = '已复制!';
