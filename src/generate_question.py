@@ -148,6 +148,21 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
     for concept in module['key_concepts']:
         concepts_html += f'<span class="concept-tag">{concept}</span>\n'
 
+    # Build archive section HTML
+    archive_section = ""
+    if archived_dates:
+        archive_section = f'''
+        <div class="archive-section">
+            <div class="archive-header">
+                <span class="archive-title">历史学习记录</span>
+                <select class="archive-select" onchange="goToArchive(this.value)">
+                    <option value="">选择日期...</option>
+                    {archive_options}
+                </select>
+            </div>
+        </div>
+        '''
+
     html = f'''<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -529,17 +544,7 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
             </div>
         </div>
 
-        {"" if not archived_dates else f'''
-        <div class="archive-section">
-            <div class="archive-header">
-                <span class="archive-title">历史学习记录</span>
-                <select class="archive-select" onchange="goToArchive(this.value)">
-                    <option value="">选择日期...</option>
-                    {archive_options}
-                </select>
-            </div>
-        </div>
-        '''}
+        {archive_section}
 
         <footer>
             <p>基于费曼学习法设计 · 生成于 {generation_time}</p>
