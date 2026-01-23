@@ -10,10 +10,13 @@ personalized study tips, and intelligent teaching-back prompts.
 import asyncio
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
+import calendar
 
 from claude_code_sdk import query, ClaudeCodeOptions, AssistantMessage, TextBlock
+from lunarcalendar import Converter, Solar, Lunar
+from lunar_calendar_template import generate_calendar_html, generate_calendar_css, generate_calendar_js
 
 # Configuration
 START_DATE = os.getenv("START_DATE", "2026-01-21")
@@ -39,6 +42,81 @@ def calculate_daily_module(modules, start_date=START_DATE):
 
     module_index = days_elapsed % len(modules)
     return modules[module_index], module_index + 1, len(modules)
+
+
+def generate_lunar_calendar_data(date_str):
+    """Generate lunar calendar data for the given date's month."""
+    date_obj = datetime.fromisoformat(date_str)
+    year = date_obj.year
+    month = date_obj.month
+
+    # Get calendar for the month
+    cal = calendar.monthcalendar(year, month)
+
+    # Generate lunar data for each day
+    calendar_data = []
+    for week in cal:
+        week_data = []
+        for day in week:
+            if day == 0:
+                week_data.append(None)
+            else:
+                solar_date = Solar(year, month, day)
+                lunar_date = Converter.Solar2Lunar(solar_date)
+
+                # Format lunar date
+                lunar_month = lunar_date.month
+                lunar_day = lunar_date.day
+                is_leap = lunar_date.isleap
+
+                # Chinese numerals for lunar dates
+                lunar_day_cn = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
+                               '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
+                               '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'][lunar_day - 1]
+
+                # Check if date is clickable (from Jan 21 to today)
+                current_date = datetime(year, month, day)
+                start_date = datetime(2026, 1, 21)  # First day of content
+                today_actual = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+                is_clickable = start_date <= current_date <= today_actual
+
+                week_data.append({
+                    'day': day,
+                    'lunar_month': lunar_month,
+                    'lunar_day': lunar_day_cn,
+                    'is_leap': is_leap,
+                    'is_today': (year == date_obj.year and month == date_obj.month and day == date_obj.day),
+                    'is_clickable': is_clickable
+                })
+        calendar_data.append(week_data)
+
+    # Get today's detailed lunar info
+    today_solar = Solar(date_obj.year, date_obj.month, date_obj.day)
+    today_lunar = Converter.Solar2Lunar(today_solar)
+
+    return {
+        'year': year,
+        'month': month,
+        'calendar': calendar_data,
+        'today_lunar': {
+            'month': today_lunar.month,
+            'day': today_lunar.day,
+            'year': today_lunar.year
+        }
+    }
+
+
+def generate_multi_month_calendar_data(today_date):
+    """Generate calendar data from January 2026 to December 2026."""
+    all_months_data = []
+
+    # Generate data for all months in 2026 (Jan to Dec)
+    for month in range(1, 13):
+        target_date = f"2026-{month:02d}-01"
+        month_data = generate_lunar_calendar_data(target_date)
+        all_months_data.append(month_data)
+
+    return all_months_data
 
 
 def get_archived_dates(archive_path=ARCHIVE_PATH, is_archive_page=False):
@@ -162,7 +240,7 @@ def parse_prompt_template(template):
     return ''.join(html_parts)
 
 
-def generate_html(module, current_num, total_num, archived_dates, today_date, enhanced_content):
+def generate_html(module, current_num, total_num, archived_dates, today_date, enhanced_content, is_archive_page=False):
     """Generate HTML content with enhanced AI-generated content."""
 
     # Use the provided today_date parameter instead of datetime.now()
@@ -170,6 +248,17 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
     today_display = date_obj.strftime("%Y/%m/%d")
     progress_percent = int((current_num / total_num) * 100)
     generation_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Generate lunar calendar data for current month
+    lunar_data = generate_lunar_calendar_data(today_date)
+
+    # Generate multi-month calendar data for navigation
+    all_months_data = generate_multi_month_calendar_data(today_date)
+
+    # Generate calendar HTML
+    calendar_html = generate_calendar_html(lunar_data, today_display, is_archive_page)
+    calendar_css = generate_calendar_css()
+    calendar_js = generate_calendar_js(all_months_data, date_obj.year, date_obj.month, is_archive_page)
 
     # Build archive options HTML (exclude current date since it's shown as default)
     archive_options = ""
@@ -224,44 +313,9 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
         }}
         .container {{ max-width: 800px; margin: 0 auto; padding: 24px 20px 48px; }}
         header {{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
             margin-bottom: 32px;
             padding-bottom: 24px;
-            border-bottom: 2px solid var(--color-border);
-        }}
-        .header-left {{
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }}
-        .header-nav {{
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }}
-        .archive-btn {{
-            padding: 10px 20px;
-            background: white;
-            color: var(--color-text);
-            border: 1px solid var(--color-border);
-            text-decoration: none;
-            border-radius: var(--radius-sm);
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-            cursor: pointer;
-            width: 160px;
-            text-align: center;
-            display: inline-block;
-            box-sizing: border-box;
-            height: 40px;
-            line-height: 18px;
-        }}
-        .archive-btn:hover {{
-            border-color: var(--color-primary);
-            color: var(--color-primary);
         }}
         .site-title {{
             font-family: 'Noto Serif SC', serif;
@@ -275,45 +329,6 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
             color: var(--color-text-light);
             margin: 0;
         }}
-        .ai-tip {{
-            background: linear-gradient(135deg, #e8f4f8, #f0f8ff);
-            border: 1px solid var(--color-ai);
-            border-radius: var(--radius-md);
-            padding: 16px 20px;
-            margin-bottom: 24px;
-            position: relative;
-        }}
-        .ai-tip::before {{
-            content: "🤖 AI学习助手";
-            position: absolute;
-            top: -10px;
-            left: 16px;
-            background: var(--color-ai);
-            color: white;
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-size: 0.75rem;
-        }}
-        .ai-tip-content {{ margin-top: 8px; color: var(--color-secondary); }}
-        .progress-section {{ margin-bottom: 32px; }}
-        .progress-header {{
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            color: var(--color-text-light);
-        }}
-        .progress-bar {{
-            height: 8px;
-            background: var(--color-border);
-            border-radius: 4px;
-            overflow: hidden;
-        }}
-        .progress-fill {{
-            height: 100%;
-            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-            border-radius: 4px;
-        }}
         .question-card {{
             background: var(--color-surface);
             border-radius: var(--radius-lg);
@@ -325,6 +340,26 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
             background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
             color: white;
             padding: 24px 28px;
+            position: relative;
+        }}
+        .archive-btn-card {{
+            position: absolute;
+            bottom: 28px;
+            right: 28px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            text-align: center;
+        }}
+        .archive-btn-card:hover {{
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
         }}
         .module-badge {{
             display: inline-block;
@@ -510,6 +545,7 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
         .archive-select:hover {{
             border-color: var(--color-primary);
         }}
+        {calendar_css}
         footer {{
             text-align: center;
             padding-top: 32px;
@@ -553,53 +589,62 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
 <body>
     <div class="container">
         <header>
-            <div class="header-left">
-                <h1 class="site-title">天纪每日学习</h1>
-                <p class="site-subtitle">倪海厦天纪课程 · 费曼学习法 · Claude AI增强</p>
-            </div>
-            <div class="header-nav">
-                <a href="archive/index.html" class="archive-btn">📚 历史记录</a>
-                <select class="archive-select" onchange="goToArchive(this.value)">
-                    <option value="">📅 {today_display}</option>
-                    {archive_options}
-                </select>
-            </div>
+            <h1 class="site-title">天纪每日学习</h1>
+            <p class="site-subtitle">倪海厦天纪课程 · 费曼学习法 · Claude AI增强</p>
         </header>
-
-        <div class="ai-tip">
-            <div class="ai-tip-content">
-                <strong>今日学习提示：</strong>{enhanced_content.get('daily_tip', '认真观看视频，做好笔记。')}
-                <br><br>
-                <strong>知识关联：</strong>{enhanced_content.get('connection_hint', '思考本模块与整体体系的关系。')}
-            </div>
-        </div>
-
-        <div class="progress-section">
-            <div class="progress-header">
-                <span>学习进度</span>
-                <span>第 {current_num} / {total_num} 模块</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: {progress_percent}%"></div>
-            </div>
-        </div>
 
         <div class="question-card">
             <div class="card-header">
-                <div class="module-badge">模块 {module['id']}</div>
-                <h2 class="module-title">{module['title']}</h2>
-                <div class="module-meta">
-                    <span class="meta-item"><span>📺</span><span>第 {module['episode']} 集</span></span>
-                    <span class="meta-item"><span>📖</span><span>教材第 {module['textbook_pages']} 页</span></span>
+                <a href="archive/index.html" class="archive-btn-card">📚 问题集锦</a>
+                <div class="calendar-container">
+                    <button class="calendar-button" onclick="toggleCalendar()">
+                        <span>📅 {today_display}</span>
+                        <span>▼</span>
+                    </button>
+                    <div id="calendar-dropdown" class="calendar-dropdown">
+                        <div class="calendar-header">
+                            <button class="month-nav-btn" onclick="changeMonth(-1)">◀</button>
+                            <span id="calendar-month-year">{lunar_data['year']}年{lunar_data['month']}月</span>
+                            <button class="month-nav-btn" onclick="changeMonth(1)">▶</button>
+                        </div>
+                        <div class="calendar-weekdays">
+                            <div class="calendar-weekday">日</div>
+                            <div class="calendar-weekday">一</div>
+                            <div class="calendar-weekday">二</div>
+                            <div class="calendar-weekday">三</div>
+                            <div class="calendar-weekday">四</div>
+                            <div class="calendar-weekday">五</div>
+                            <div class="calendar-weekday">六</div>
+                        </div>
+                        {calendar_html}
+                    </div>
                 </div>
+                <h2 class="module-title">{module['title']}</h2>
             </div>
 
             <div class="card-body">
                 <div class="question-section">
-                    <div class="section-label">今日学习问题</div>
+                    <div class="section-label">今日一问</div>
                     <div class="question-text">{module['question']}</div>
-                    <div class="question-text deeper-question">
-                        <strong>深入思考：</strong>{enhanced_content.get('deeper_question', module['question'])}
+                </div>
+
+                <div class="question-section">
+                    <div class="section-label">学习材料</div>
+                    <div class="resources-section">
+                        <a href="{module['video_url']}" target="_blank" rel="noopener" class="resource-link">
+                            <span class="resource-icon">🎬</span>
+                            <div class="resource-info">
+                                <div class="resource-title">观看视频</div>
+                                <div class="resource-detail">天纪第 {module['episode']} 集</div>
+                            </div>
+                        </a>
+                        <a href="天机道教材.pdf" target="_blank" rel="noopener" class="resource-link">
+                            <span class="resource-icon">📖</span>
+                            <div class="resource-info">
+                                <div class="resource-title">阅读教材</div>
+                                <div class="resource-detail">天机道 第 {module['textbook_pages']} 页</div>
+                            </div>
+                        </a>
                     </div>
                 </div>
 
@@ -612,27 +657,10 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
 
                 <div class="prompt-section">
                     <div class="prompt-header">
-                        <span class="prompt-title">教回提示词 (Feynman Technique)</span>
+                        <span class="prompt-title">教给我的AI</span>
                         <button class="copy-btn" onclick="copyPrompt()">复制提示词</button>
                     </div>
                     <div class="prompt-content" id="prompt-container">{prompt_html}</div>
-                </div>
-
-                <div class="resources-section">
-                    <a href="{module['video_url']}" target="_blank" rel="noopener" class="resource-link">
-                        <span class="resource-icon">🎬</span>
-                        <div class="resource-info">
-                            <div class="resource-title">观看视频</div>
-                            <div class="resource-detail">天纪第 {module['episode']} 集</div>
-                        </div>
-                    </a>
-                    <a href="天机道教材.pdf" target="_blank" rel="noopener" class="resource-link">
-                        <span class="resource-icon">📚</span>
-                        <div class="resource-info">
-                            <div class="resource-title">阅读教材</div>
-                            <div class="resource-detail">天机道 第 {module['textbook_pages']} 页</div>
-                        </div>
-                    </a>
                 </div>
             </div>
         </div>
@@ -695,6 +723,7 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
         function goToArchive(url) {{
             if (url) window.location.href = url;
         }}
+        {calendar_js}
     </script>
 </body>
 </html>'''
@@ -812,7 +841,6 @@ def generate_archive_index(modules, archive_path=ARCHIVE_PATH):
             text-align: center;
             margin-bottom: 32px;
             padding-bottom: 24px;
-            border-bottom: 2px solid var(--color-border);
         }}
         .site-title {{
             font-family: 'Noto Serif SC', serif;
@@ -994,7 +1022,8 @@ async def main():
         total_num=total_num,
         archived_dates=archived_dates_main,
         today_date=today_str,
-        enhanced_content=enhanced_content
+        enhanced_content=enhanced_content,
+        is_archive_page=False
     )
 
     # Save main page
@@ -1010,7 +1039,8 @@ async def main():
         total_num=total_num,
         archived_dates=archived_dates_archive,
         today_date=today_str,
-        enhanced_content=enhanced_content
+        enhanced_content=enhanced_content,
+        is_archive_page=True
     )
 
     # Archive today's question with corrected URLs

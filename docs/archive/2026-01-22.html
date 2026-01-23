@@ -36,44 +36,9 @@
         }
         .container { max-width: 800px; margin: 0 auto; padding: 24px 20px 48px; }
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
             margin-bottom: 32px;
             padding-bottom: 24px;
-            border-bottom: 2px solid var(--color-border);
-        }
-        .header-left {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .header-nav {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        .archive-btn {
-            padding: 10px 20px;
-            background: white;
-            color: var(--color-text);
-            border: 1px solid var(--color-border);
-            text-decoration: none;
-            border-radius: var(--radius-sm);
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-            cursor: pointer;
-            width: 160px;
-            text-align: center;
-            display: inline-block;
-            box-sizing: border-box;
-            height: 40px;
-            line-height: 18px;
-        }
-        .archive-btn:hover {
-            border-color: var(--color-primary);
-            color: var(--color-primary);
         }
         .site-title {
             font-family: 'Noto Serif SC', serif;
@@ -87,45 +52,6 @@
             color: var(--color-text-light);
             margin: 0;
         }
-        .ai-tip {
-            background: linear-gradient(135deg, #e8f4f8, #f0f8ff);
-            border: 1px solid var(--color-ai);
-            border-radius: var(--radius-md);
-            padding: 16px 20px;
-            margin-bottom: 24px;
-            position: relative;
-        }
-        .ai-tip::before {
-            content: "🤖 AI学习助手";
-            position: absolute;
-            top: -10px;
-            left: 16px;
-            background: var(--color-ai);
-            color: white;
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-size: 0.75rem;
-        }
-        .ai-tip-content { margin-top: 8px; color: var(--color-secondary); }
-        .progress-section { margin-bottom: 32px; }
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            color: var(--color-text-light);
-        }
-        .progress-bar {
-            height: 8px;
-            background: var(--color-border);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-            border-radius: 4px;
-        }
         .question-card {
             background: var(--color-surface);
             border-radius: var(--radius-lg);
@@ -137,6 +63,26 @@
             background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
             color: white;
             padding: 24px 28px;
+            position: relative;
+        }
+        .archive-btn-card {
+            position: absolute;
+            bottom: 28px;
+            right: 28px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .archive-btn-card:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
         }
         .module-badge {
             display: inline-block;
@@ -322,6 +268,121 @@
         .archive-select:hover {
             border-color: var(--color-primary);
         }
+        
+        .calendar-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .calendar-button {
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .calendar-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .calendar-dropdown {
+            display: none;
+            position: absolute;
+            top: 35px;
+            left: 0;
+            background: var(--color-surface);
+            border: 2px solid var(--color-primary);
+            border-radius: var(--radius-md);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            padding: 16px;
+            z-index: 1000;
+            min-width: 320px;
+        }
+        .calendar-dropdown.show {
+            display: block;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--color-primary);
+        }
+        .month-nav-btn {
+            background: none;
+            border: none;
+            color: var(--color-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: all 0.2s ease;
+        }
+        .month-nav-btn:hover {
+            background: var(--color-background);
+            border-radius: 4px;
+        }
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        .calendar-weekday {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+            padding: 4px;
+        }
+        .calendar-week {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+        .calendar-day {
+            text-align: center;
+            padding: 8px 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .calendar-day:hover {
+            background: var(--color-background);
+        }
+        .calendar-day.today {
+            background: var(--color-primary);
+            color: white;
+        }
+        .calendar-day.empty {
+            cursor: default;
+        }
+        .calendar-day.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .calendar-day.disabled:hover {
+            background: transparent;
+        }
+        .solar-day {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+        .lunar-day {
+            font-size: 0.7rem;
+            color: var(--color-text-light);
+            margin-top: 2px;
+        }
+        .calendar-day.today .solar-day {
+            color: white;
+        }
+        .calendar-day.today .lunar-day {
+            color: rgba(255,255,255,0.8);
+        }
+    
         footer {
             text-align: center;
             padding-top: 32px;
@@ -365,55 +426,186 @@
 <body>
     <div class="container">
         <header>
-            <div class="header-left">
-                <h1 class="site-title">天纪每日学习</h1>
-                <p class="site-subtitle">倪海厦天纪课程 · 费曼学习法 · Claude AI增强</p>
-            </div>
-            <div class="header-nav">
-                <a href="archive/index.html" class="archive-btn">📚 历史记录</a>
-                <select class="archive-select" onchange="goToArchive(this.value)">
-                    <option value="">📅 2026/01/22</option>
-                    <option value="2026-01-23.html">2026/01/23</option>
-<option value="2026-01-21.html">2026/01/21</option>
-
-                </select>
-            </div>
+            <h1 class="site-title">天纪每日学习</h1>
+            <p class="site-subtitle">倪海厦天纪课程 · 费曼学习法 · Claude AI增强</p>
         </header>
-
-        <div class="ai-tip">
-            <div class="ai-tip-content">
-                <strong>今日学习提示：</strong>认真观看视频，做好笔记，理解比记忆更重要。
-                <br><br>
-                <strong>知识关联：</strong>思考本模块与整体命理体系的关系。
-            </div>
-        </div>
-
-        <div class="progress-section">
-            <div class="progress-header">
-                <span>学习进度</span>
-                <span>第 2 / 5 模块</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: 40%"></div>
-            </div>
-        </div>
 
         <div class="question-card">
             <div class="card-header">
-                <div class="module-badge">模块 002</div>
-                <h2 class="module-title">十二宫位详解</h2>
-                <div class="module-meta">
-                    <span class="meta-item"><span>📺</span><span>第 4-6 集</span></span>
-                    <span class="meta-item"><span>📖</span><span>教材第 16-35 页</span></span>
+                <a href="archive/index.html" class="archive-btn-card">📚 问题集锦</a>
+                <div class="calendar-container">
+                    <button class="calendar-button" onclick="toggleCalendar()">
+                        <span>📅 2026/01/22</span>
+                        <span>▼</span>
+                    </button>
+                    <div id="calendar-dropdown" class="calendar-dropdown">
+                        <div class="calendar-header">
+                            <button class="month-nav-btn" onclick="changeMonth(-1)">◀</button>
+                            <span id="calendar-month-year">2026年1月</span>
+                            <button class="month-nav-btn" onclick="changeMonth(1)">▶</button>
+                        </div>
+                        <div class="calendar-weekdays">
+                            <div class="calendar-weekday">日</div>
+                            <div class="calendar-weekday">一</div>
+                            <div class="calendar-weekday">二</div>
+                            <div class="calendar-weekday">三</div>
+                            <div class="calendar-weekday">四</div>
+                            <div class="calendar-weekday">五</div>
+                            <div class="calendar-weekday">六</div>
+                        </div>
+                        <div class="calendar-week"><div class="calendar-day empty"></div><div class="calendar-day empty"></div><div class="calendar-day empty"></div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">1</div>
+                    <div class="lunar-day">十三</div>
                 </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">2</div>
+                    <div class="lunar-day">十四</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">3</div>
+                    <div class="lunar-day">十五</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">4</div>
+                    <div class="lunar-day">十六</div>
+                </div></div><div class="calendar-week">
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">5</div>
+                    <div class="lunar-day">十七</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">6</div>
+                    <div class="lunar-day">十八</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">7</div>
+                    <div class="lunar-day">十九</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">8</div>
+                    <div class="lunar-day">二十</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">9</div>
+                    <div class="lunar-day">廿一</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">10</div>
+                    <div class="lunar-day">廿二</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">11</div>
+                    <div class="lunar-day">廿三</div>
+                </div></div><div class="calendar-week">
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">12</div>
+                    <div class="lunar-day">廿四</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">13</div>
+                    <div class="lunar-day">廿五</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">14</div>
+                    <div class="lunar-day">廿六</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">15</div>
+                    <div class="lunar-day">廿七</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">16</div>
+                    <div class="lunar-day">廿八</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">17</div>
+                    <div class="lunar-day">廿九</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">18</div>
+                    <div class="lunar-day">三十</div>
+                </div></div><div class="calendar-week">
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">19</div>
+                    <div class="lunar-day">初一</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">20</div>
+                    <div class="lunar-day">初二</div>
+                </div>
+                <div class="calendar-day" onclick="navigateToDate('2026-01-21.html')">
+                    <div class="solar-day">21</div>
+                    <div class="lunar-day">初三</div>
+                </div>
+                <div class="calendar-day today" onclick="navigateToDate('2026-01-22.html')">
+                    <div class="solar-day">22</div>
+                    <div class="lunar-day">初四</div>
+                </div>
+                <div class="calendar-day" onclick="navigateToDate('2026-01-23.html')">
+                    <div class="solar-day">23</div>
+                    <div class="lunar-day">初五</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">24</div>
+                    <div class="lunar-day">初六</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">25</div>
+                    <div class="lunar-day">初七</div>
+                </div></div><div class="calendar-week">
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">26</div>
+                    <div class="lunar-day">初八</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">27</div>
+                    <div class="lunar-day">初九</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">28</div>
+                    <div class="lunar-day">初十</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">29</div>
+                    <div class="lunar-day">十一</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">30</div>
+                    <div class="lunar-day">十二</div>
+                </div>
+                <div class="calendar-day disabled" >
+                    <div class="solar-day">31</div>
+                    <div class="lunar-day">十三</div>
+                </div><div class="calendar-day empty"></div></div>
+                    </div>
+                </div>
+                <h2 class="module-title">十二宫位详解</h2>
             </div>
 
             <div class="card-body">
                 <div class="question-section">
-                    <div class="section-label">今日学习问题</div>
+                    <div class="section-label">今日一问</div>
                     <div class="question-text">十二宫位各自代表什么？它们之间如何相互影响？</div>
-                    <div class="question-text deeper-question">
-                        <strong>深入思考：</strong>十二宫位各自代表什么？它们之间如何相互影响？
+                </div>
+
+                <div class="question-section">
+                    <div class="section-label">学习材料</div>
+                    <div class="resources-section">
+                        <a href="https://www.youtube.com/watch?v=jJMWFi0nJ6c&list=PLba-X8Aih0CCLzEeoICOx7qzkvjjCJt0G" target="_blank" rel="noopener" class="resource-link">
+                            <span class="resource-icon">🎬</span>
+                            <div class="resource-info">
+                                <div class="resource-title">观看视频</div>
+                                <div class="resource-detail">天纪第 4-6 集</div>
+                            </div>
+                        </a>
+                        <a href="天机道教材.pdf" target="_blank" rel="noopener" class="resource-link">
+                            <span class="resource-icon">📖</span>
+                            <div class="resource-info">
+                                <div class="resource-title">阅读教材</div>
+                                <div class="resource-detail">天机道 第 16-35 页</div>
+                            </div>
+                        </a>
                     </div>
                 </div>
 
@@ -438,7 +630,7 @@
 
                 <div class="prompt-section">
                     <div class="prompt-header">
-                        <span class="prompt-title">教回提示词 (Feynman Technique)</span>
+                        <span class="prompt-title">教给我的AI</span>
                         <button class="copy-btn" onclick="copyPrompt()">复制提示词</button>
                     </div>
                     <div class="prompt-content" id="prompt-container"><div class="prompt-static">我正在学习倪海厦天纪第4-6集的内容。今天的主题是：十二宫位详解
@@ -456,28 +648,11 @@
 - 视频：天纪第4-6集
 - 教材：天机道第16-35页</div></div>
                 </div>
-
-                <div class="resources-section">
-                    <a href="https://www.youtube.com/watch?v=jJMWFi0nJ6c&list=PLba-X8Aih0CCLzEeoICOx7qzkvjjCJt0G" target="_blank" rel="noopener" class="resource-link">
-                        <span class="resource-icon">🎬</span>
-                        <div class="resource-info">
-                            <div class="resource-title">观看视频</div>
-                            <div class="resource-detail">天纪第 4-6 集</div>
-                        </div>
-                    </a>
-                    <a href="天机道教材.pdf" target="_blank" rel="noopener" class="resource-link">
-                        <span class="resource-icon">📚</span>
-                        <div class="resource-info">
-                            <div class="resource-title">阅读教材</div>
-                            <div class="resource-detail">天机道 第 16-35 页</div>
-                        </div>
-                    </a>
-                </div>
             </div>
         </div>
 
         <footer>
-            <p>基于费曼学习法设计 · 生成于 2026-01-23 12:32:52</p>
+            <p>基于费曼学习法设计 · 生成于 2026-01-23 18:42:36</p>
             <div class="powered-by">🤖 Powered by Claude Agent SDK</div>
         </footer>
     </div>
@@ -534,6 +709,98 @@
         function goToArchive(url) {
             if (url) window.location.href = url;
         }
+        
+        // Store all months data (Jan 2026 to Dec 2026)
+        const allMonthsData = [{"year": 2026, "month": 1, "calendar": [[null, null, null, {"day": 1, "lunar_month": 11, "lunar_day": "十三", "is_leap": false, "is_today": true, "is_clickable": false}, {"day": 2, "lunar_month": 11, "lunar_day": "十四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 3, "lunar_month": 11, "lunar_day": "十五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 4, "lunar_month": 11, "lunar_day": "十六", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 5, "lunar_month": 11, "lunar_day": "十七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 6, "lunar_month": 11, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 7, "lunar_month": 11, "lunar_day": "十九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 8, "lunar_month": 11, "lunar_day": "二十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 9, "lunar_month": 11, "lunar_day": "廿一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 10, "lunar_month": 11, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 11, "lunar_month": 11, "lunar_day": "廿三", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 12, "lunar_month": 11, "lunar_day": "廿四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 13, "lunar_month": 11, "lunar_day": "廿五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 14, "lunar_month": 11, "lunar_day": "廿六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 15, "lunar_month": 11, "lunar_day": "廿七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 16, "lunar_month": 11, "lunar_day": "廿八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 17, "lunar_month": 11, "lunar_day": "廿九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 18, "lunar_month": 11, "lunar_day": "三十", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 19, "lunar_month": 12, "lunar_day": "初一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 20, "lunar_month": 12, "lunar_day": "初二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 21, "lunar_month": 12, "lunar_day": "初三", "is_leap": false, "is_today": false, "is_clickable": true}, {"day": 22, "lunar_month": 12, "lunar_day": "初四", "is_leap": false, "is_today": false, "is_clickable": true}, {"day": 23, "lunar_month": 12, "lunar_day": "初五", "is_leap": false, "is_today": false, "is_clickable": true}, {"day": 24, "lunar_month": 12, "lunar_day": "初六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 25, "lunar_month": 12, "lunar_day": "初七", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 26, "lunar_month": 12, "lunar_day": "初八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 27, "lunar_month": 12, "lunar_day": "初九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 28, "lunar_month": 12, "lunar_day": "初十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 29, "lunar_month": 12, "lunar_day": "十一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 30, "lunar_month": 12, "lunar_day": "十二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 31, "lunar_month": 12, "lunar_day": "十三", "is_leap": false, "is_today": false, "is_clickable": false}, null]], "today_lunar": {"month": 11, "day": 13, "year": 2025}}, {"year": 2026, "month": 2, "calendar": [[null, null, null, null, null, null, {"day": 1, "lunar_month": 12, "lunar_day": "十四", "is_leap": false, "is_today": true, "is_clickable": false}], [{"day": 2, "lunar_month": 12, "lunar_day": "十五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 3, "lunar_month": 12, "lunar_day": "十六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 4, "lunar_month": 12, "lunar_day": "十七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 5, "lunar_month": 12, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 6, "lunar_month": 12, "lunar_day": "十九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 7, "lunar_month": 12, "lunar_day": "二十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 8, "lunar_month": 12, "lunar_day": "廿一", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 9, "lunar_month": 12, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 10, "lunar_month": 12, "lunar_day": "廿三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 11, "lunar_month": 12, "lunar_day": "廿四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 12, "lunar_month": 12, "lunar_day": "廿五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 13, "lunar_month": 12, "lunar_day": "廿六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 14, "lunar_month": 12, "lunar_day": "廿七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 15, "lunar_month": 12, "lunar_day": "廿八", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 16, "lunar_month": 12, "lunar_day": "廿九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 17, "lunar_month": 1, "lunar_day": "初一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 18, "lunar_month": 1, "lunar_day": "初二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 19, "lunar_month": 1, "lunar_day": "初三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 20, "lunar_month": 1, "lunar_day": "初四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 21, "lunar_month": 1, "lunar_day": "初五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 22, "lunar_month": 1, "lunar_day": "初六", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 23, "lunar_month": 1, "lunar_day": "初七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 24, "lunar_month": 1, "lunar_day": "初八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 25, "lunar_month": 1, "lunar_day": "初九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 26, "lunar_month": 1, "lunar_day": "初十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 27, "lunar_month": 1, "lunar_day": "十一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 28, "lunar_month": 1, "lunar_day": "十二", "is_leap": false, "is_today": false, "is_clickable": false}, null]], "today_lunar": {"month": 12, "day": 14, "year": 2025}}, {"year": 2026, "month": 3, "calendar": [[null, null, null, null, null, null, {"day": 1, "lunar_month": 1, "lunar_day": "十三", "is_leap": false, "is_today": true, "is_clickable": false}], [{"day": 2, "lunar_month": 1, "lunar_day": "十四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 3, "lunar_month": 1, "lunar_day": "十五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 4, "lunar_month": 1, "lunar_day": "十六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 5, "lunar_month": 1, "lunar_day": "十七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 6, "lunar_month": 1, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 7, "lunar_month": 1, "lunar_day": "十九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 8, "lunar_month": 1, "lunar_day": "二十", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 9, "lunar_month": 1, "lunar_day": "廿一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 10, "lunar_month": 1, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 11, "lunar_month": 1, "lunar_day": "廿三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 12, "lunar_month": 1, "lunar_day": "廿四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 13, "lunar_month": 1, "lunar_day": "廿五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 14, "lunar_month": 1, "lunar_day": "廿六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 15, "lunar_month": 1, "lunar_day": "廿七", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 16, "lunar_month": 1, "lunar_day": "廿八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 17, "lunar_month": 1, "lunar_day": "廿九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 18, "lunar_month": 1, "lunar_day": "三十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 19, "lunar_month": 2, "lunar_day": "初一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 20, "lunar_month": 2, "lunar_day": "初二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 21, "lunar_month": 2, "lunar_day": "初三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 22, "lunar_month": 2, "lunar_day": "初四", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 23, "lunar_month": 2, "lunar_day": "初五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 24, "lunar_month": 2, "lunar_day": "初六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 25, "lunar_month": 2, "lunar_day": "初七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 26, "lunar_month": 2, "lunar_day": "初八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 27, "lunar_month": 2, "lunar_day": "初九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 28, "lunar_month": 2, "lunar_day": "初十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 29, "lunar_month": 2, "lunar_day": "十一", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 30, "lunar_month": 2, "lunar_day": "十二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 31, "lunar_month": 2, "lunar_day": "十三", "is_leap": false, "is_today": false, "is_clickable": false}, null, null, null, null, null]], "today_lunar": {"month": 1, "day": 13, "year": 2026}}, {"year": 2026, "month": 4, "calendar": [[null, null, {"day": 1, "lunar_month": 2, "lunar_day": "十四", "is_leap": false, "is_today": true, "is_clickable": false}, {"day": 2, "lunar_month": 2, "lunar_day": "十五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 3, "lunar_month": 2, "lunar_day": "十六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 4, "lunar_month": 2, "lunar_day": "十七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 5, "lunar_month": 2, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 6, "lunar_month": 2, "lunar_day": "十九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 7, "lunar_month": 2, "lunar_day": "二十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 8, "lunar_month": 2, "lunar_day": "廿一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 9, "lunar_month": 2, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 10, "lunar_month": 2, "lunar_day": "廿三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 11, "lunar_month": 2, "lunar_day": "廿四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 12, "lunar_month": 2, "lunar_day": "廿五", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 13, "lunar_month": 2, "lunar_day": "廿六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 14, "lunar_month": 2, "lunar_day": "廿七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 15, "lunar_month": 2, "lunar_day": "廿八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 16, "lunar_month": 2, "lunar_day": "廿九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 17, "lunar_month": 3, "lunar_day": "初一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 18, "lunar_month": 3, "lunar_day": "初二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 19, "lunar_month": 3, "lunar_day": "初三", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 20, "lunar_month": 3, "lunar_day": "初四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 21, "lunar_month": 3, "lunar_day": "初五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 22, "lunar_month": 3, "lunar_day": "初六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 23, "lunar_month": 3, "lunar_day": "初七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 24, "lunar_month": 3, "lunar_day": "初八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 25, "lunar_month": 3, "lunar_day": "初九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 26, "lunar_month": 3, "lunar_day": "初十", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 27, "lunar_month": 3, "lunar_day": "十一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 28, "lunar_month": 3, "lunar_day": "十二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 29, "lunar_month": 3, "lunar_day": "十三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 30, "lunar_month": 3, "lunar_day": "十四", "is_leap": false, "is_today": false, "is_clickable": false}, null, null, null]], "today_lunar": {"month": 2, "day": 14, "year": 2026}}, {"year": 2026, "month": 5, "calendar": [[null, null, null, null, {"day": 1, "lunar_month": 3, "lunar_day": "十五", "is_leap": false, "is_today": true, "is_clickable": false}, {"day": 2, "lunar_month": 3, "lunar_day": "十六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 3, "lunar_month": 3, "lunar_day": "十七", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 4, "lunar_month": 3, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 5, "lunar_month": 3, "lunar_day": "十九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 6, "lunar_month": 3, "lunar_day": "二十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 7, "lunar_month": 3, "lunar_day": "廿一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 8, "lunar_month": 3, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 9, "lunar_month": 3, "lunar_day": "廿三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 10, "lunar_month": 3, "lunar_day": "廿四", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 11, "lunar_month": 3, "lunar_day": "廿五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 12, "lunar_month": 3, "lunar_day": "廿六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 13, "lunar_month": 3, "lunar_day": "廿七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 14, "lunar_month": 3, "lunar_day": "廿八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 15, "lunar_month": 3, "lunar_day": "廿九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 16, "lunar_month": 3, "lunar_day": "三十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 17, "lunar_month": 4, "lunar_day": "初一", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 18, "lunar_month": 4, "lunar_day": "初二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 19, "lunar_month": 4, "lunar_day": "初三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 20, "lunar_month": 4, "lunar_day": "初四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 21, "lunar_month": 4, "lunar_day": "初五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 22, "lunar_month": 4, "lunar_day": "初六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 23, "lunar_month": 4, "lunar_day": "初七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 24, "lunar_month": 4, "lunar_day": "初八", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 25, "lunar_month": 4, "lunar_day": "初九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 26, "lunar_month": 4, "lunar_day": "初十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 27, "lunar_month": 4, "lunar_day": "十一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 28, "lunar_month": 4, "lunar_day": "十二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 29, "lunar_month": 4, "lunar_day": "十三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 30, "lunar_month": 4, "lunar_day": "十四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 31, "lunar_month": 4, "lunar_day": "十五", "is_leap": false, "is_today": false, "is_clickable": false}]], "today_lunar": {"month": 3, "day": 15, "year": 2026}}, {"year": 2026, "month": 6, "calendar": [[{"day": 1, "lunar_month": 4, "lunar_day": "十六", "is_leap": false, "is_today": true, "is_clickable": false}, {"day": 2, "lunar_month": 4, "lunar_day": "十七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 3, "lunar_month": 4, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 4, "lunar_month": 4, "lunar_day": "十九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 5, "lunar_month": 4, "lunar_day": "二十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 6, "lunar_month": 4, "lunar_day": "廿一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 7, "lunar_month": 4, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 8, "lunar_month": 4, "lunar_day": "廿三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 9, "lunar_month": 4, "lunar_day": "廿四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 10, "lunar_month": 4, "lunar_day": "廿五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 11, "lunar_month": 4, "lunar_day": "廿六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 12, "lunar_month": 4, "lunar_day": "廿七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 13, "lunar_month": 4, "lunar_day": "廿八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 14, "lunar_month": 4, "lunar_day": "廿九", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 15, "lunar_month": 5, "lunar_day": "初一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 16, "lunar_month": 5, "lunar_day": "初二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 17, "lunar_month": 5, "lunar_day": "初三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 18, "lunar_month": 5, "lunar_day": "初四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 19, "lunar_month": 5, "lunar_day": "初五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 20, "lunar_month": 5, "lunar_day": "初六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 21, "lunar_month": 5, "lunar_day": "初七", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 22, "lunar_month": 5, "lunar_day": "初八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 23, "lunar_month": 5, "lunar_day": "初九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 24, "lunar_month": 5, "lunar_day": "初十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 25, "lunar_month": 5, "lunar_day": "十一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 26, "lunar_month": 5, "lunar_day": "十二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 27, "lunar_month": 5, "lunar_day": "十三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 28, "lunar_month": 5, "lunar_day": "十四", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 29, "lunar_month": 5, "lunar_day": "十五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 30, "lunar_month": 5, "lunar_day": "十六", "is_leap": false, "is_today": false, "is_clickable": false}, null, null, null, null, null]], "today_lunar": {"month": 4, "day": 16, "year": 2026}}, {"year": 2026, "month": 7, "calendar": [[null, null, {"day": 1, "lunar_month": 5, "lunar_day": "十七", "is_leap": false, "is_today": true, "is_clickable": false}, {"day": 2, "lunar_month": 5, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 3, "lunar_month": 5, "lunar_day": "十九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 4, "lunar_month": 5, "lunar_day": "二十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 5, "lunar_month": 5, "lunar_day": "廿一", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 6, "lunar_month": 5, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 7, "lunar_month": 5, "lunar_day": "廿三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 8, "lunar_month": 5, "lunar_day": "廿四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 9, "lunar_month": 5, "lunar_day": "廿五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 10, "lunar_month": 5, "lunar_day": "廿六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 11, "lunar_month": 5, "lunar_day": "廿七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 12, "lunar_month": 5, "lunar_day": "廿八", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 13, "lunar_month": 5, "lunar_day": "廿九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 14, "lunar_month": 6, "lunar_day": "初一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 15, "lunar_month": 6, "lunar_day": "初二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 16, "lunar_month": 6, "lunar_day": "初三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 17, "lunar_month": 6, "lunar_day": "初四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 18, "lunar_month": 6, "lunar_day": "初五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 19, "lunar_month": 6, "lunar_day": "初六", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 20, "lunar_month": 6, "lunar_day": "初七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 21, "lunar_month": 6, "lunar_day": "初八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 22, "lunar_month": 6, "lunar_day": "初九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 23, "lunar_month": 6, "lunar_day": "初十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 24, "lunar_month": 6, "lunar_day": "十一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 25, "lunar_month": 6, "lunar_day": "十二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 26, "lunar_month": 6, "lunar_day": "十三", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 27, "lunar_month": 6, "lunar_day": "十四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 28, "lunar_month": 6, "lunar_day": "十五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 29, "lunar_month": 6, "lunar_day": "十六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 30, "lunar_month": 6, "lunar_day": "十七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 31, "lunar_month": 6, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}, null, null]], "today_lunar": {"month": 5, "day": 17, "year": 2026}}, {"year": 2026, "month": 8, "calendar": [[null, null, null, null, null, {"day": 1, "lunar_month": 6, "lunar_day": "十九", "is_leap": false, "is_today": true, "is_clickable": false}, {"day": 2, "lunar_month": 6, "lunar_day": "二十", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 3, "lunar_month": 6, "lunar_day": "廿一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 4, "lunar_month": 6, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 5, "lunar_month": 6, "lunar_day": "廿三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 6, "lunar_month": 6, "lunar_day": "廿四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 7, "lunar_month": 6, "lunar_day": "廿五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 8, "lunar_month": 6, "lunar_day": "廿六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 9, "lunar_month": 6, "lunar_day": "廿七", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 10, "lunar_month": 6, "lunar_day": "廿八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 11, "lunar_month": 6, "lunar_day": "廿九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 12, "lunar_month": 6, "lunar_day": "三十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 13, "lunar_month": 7, "lunar_day": "初一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 14, "lunar_month": 7, "lunar_day": "初二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 15, "lunar_month": 7, "lunar_day": "初三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 16, "lunar_month": 7, "lunar_day": "初四", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 17, "lunar_month": 7, "lunar_day": "初五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 18, "lunar_month": 7, "lunar_day": "初六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 19, "lunar_month": 7, "lunar_day": "初七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 20, "lunar_month": 7, "lunar_day": "初八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 21, "lunar_month": 7, "lunar_day": "初九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 22, "lunar_month": 7, "lunar_day": "初十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 23, "lunar_month": 7, "lunar_day": "十一", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 24, "lunar_month": 7, "lunar_day": "十二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 25, "lunar_month": 7, "lunar_day": "十三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 26, "lunar_month": 7, "lunar_day": "十四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 27, "lunar_month": 7, "lunar_day": "十五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 28, "lunar_month": 7, "lunar_day": "十六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 29, "lunar_month": 7, "lunar_day": "十七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 30, "lunar_month": 7, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 31, "lunar_month": 7, "lunar_day": "十九", "is_leap": false, "is_today": false, "is_clickable": false}, null, null, null, null, null, null]], "today_lunar": {"month": 6, "day": 19, "year": 2026}}, {"year": 2026, "month": 9, "calendar": [[null, {"day": 1, "lunar_month": 7, "lunar_day": "二十", "is_leap": false, "is_today": true, "is_clickable": false}, {"day": 2, "lunar_month": 7, "lunar_day": "廿一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 3, "lunar_month": 7, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 4, "lunar_month": 7, "lunar_day": "廿三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 5, "lunar_month": 7, "lunar_day": "廿四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 6, "lunar_month": 7, "lunar_day": "廿五", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 7, "lunar_month": 7, "lunar_day": "廿六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 8, "lunar_month": 7, "lunar_day": "廿七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 9, "lunar_month": 7, "lunar_day": "廿八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 10, "lunar_month": 7, "lunar_day": "廿九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 11, "lunar_month": 8, "lunar_day": "初一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 12, "lunar_month": 8, "lunar_day": "初二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 13, "lunar_month": 8, "lunar_day": "初三", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 14, "lunar_month": 8, "lunar_day": "初四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 15, "lunar_month": 8, "lunar_day": "初五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 16, "lunar_month": 8, "lunar_day": "初六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 17, "lunar_month": 8, "lunar_day": "初七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 18, "lunar_month": 8, "lunar_day": "初八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 19, "lunar_month": 8, "lunar_day": "初九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 20, "lunar_month": 8, "lunar_day": "初十", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 21, "lunar_month": 8, "lunar_day": "十一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 22, "lunar_month": 8, "lunar_day": "十二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 23, "lunar_month": 8, "lunar_day": "十三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 24, "lunar_month": 8, "lunar_day": "十四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 25, "lunar_month": 8, "lunar_day": "十五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 26, "lunar_month": 8, "lunar_day": "十六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 27, "lunar_month": 8, "lunar_day": "十七", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 28, "lunar_month": 8, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 29, "lunar_month": 8, "lunar_day": "十九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 30, "lunar_month": 8, "lunar_day": "二十", "is_leap": false, "is_today": false, "is_clickable": false}, null, null, null, null]], "today_lunar": {"month": 7, "day": 20, "year": 2026}}, {"year": 2026, "month": 10, "calendar": [[null, null, null, {"day": 1, "lunar_month": 8, "lunar_day": "廿一", "is_leap": false, "is_today": true, "is_clickable": false}, {"day": 2, "lunar_month": 8, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 3, "lunar_month": 8, "lunar_day": "廿三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 4, "lunar_month": 8, "lunar_day": "廿四", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 5, "lunar_month": 8, "lunar_day": "廿五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 6, "lunar_month": 8, "lunar_day": "廿六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 7, "lunar_month": 8, "lunar_day": "廿七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 8, "lunar_month": 8, "lunar_day": "廿八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 9, "lunar_month": 8, "lunar_day": "廿九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 10, "lunar_month": 9, "lunar_day": "初一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 11, "lunar_month": 9, "lunar_day": "初二", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 12, "lunar_month": 9, "lunar_day": "初三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 13, "lunar_month": 9, "lunar_day": "初四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 14, "lunar_month": 9, "lunar_day": "初五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 15, "lunar_month": 9, "lunar_day": "初六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 16, "lunar_month": 9, "lunar_day": "初七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 17, "lunar_month": 9, "lunar_day": "初八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 18, "lunar_month": 9, "lunar_day": "初九", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 19, "lunar_month": 9, "lunar_day": "初十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 20, "lunar_month": 9, "lunar_day": "十一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 21, "lunar_month": 9, "lunar_day": "十二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 22, "lunar_month": 9, "lunar_day": "十三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 23, "lunar_month": 9, "lunar_day": "十四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 24, "lunar_month": 9, "lunar_day": "十五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 25, "lunar_month": 9, "lunar_day": "十六", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 26, "lunar_month": 9, "lunar_day": "十七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 27, "lunar_month": 9, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 28, "lunar_month": 9, "lunar_day": "十九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 29, "lunar_month": 9, "lunar_day": "二十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 30, "lunar_month": 9, "lunar_day": "廿一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 31, "lunar_month": 9, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}, null]], "today_lunar": {"month": 8, "day": 21, "year": 2026}}, {"year": 2026, "month": 11, "calendar": [[null, null, null, null, null, null, {"day": 1, "lunar_month": 9, "lunar_day": "廿三", "is_leap": false, "is_today": true, "is_clickable": false}], [{"day": 2, "lunar_month": 9, "lunar_day": "廿四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 3, "lunar_month": 9, "lunar_day": "廿五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 4, "lunar_month": 9, "lunar_day": "廿六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 5, "lunar_month": 9, "lunar_day": "廿七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 6, "lunar_month": 9, "lunar_day": "廿八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 7, "lunar_month": 9, "lunar_day": "廿九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 8, "lunar_month": 9, "lunar_day": "三十", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 9, "lunar_month": 10, "lunar_day": "初一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 10, "lunar_month": 10, "lunar_day": "初二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 11, "lunar_month": 10, "lunar_day": "初三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 12, "lunar_month": 10, "lunar_day": "初四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 13, "lunar_month": 10, "lunar_day": "初五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 14, "lunar_month": 10, "lunar_day": "初六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 15, "lunar_month": 10, "lunar_day": "初七", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 16, "lunar_month": 10, "lunar_day": "初八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 17, "lunar_month": 10, "lunar_day": "初九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 18, "lunar_month": 10, "lunar_day": "初十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 19, "lunar_month": 10, "lunar_day": "十一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 20, "lunar_month": 10, "lunar_day": "十二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 21, "lunar_month": 10, "lunar_day": "十三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 22, "lunar_month": 10, "lunar_day": "十四", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 23, "lunar_month": 10, "lunar_day": "十五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 24, "lunar_month": 10, "lunar_day": "十六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 25, "lunar_month": 10, "lunar_day": "十七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 26, "lunar_month": 10, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 27, "lunar_month": 10, "lunar_day": "十九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 28, "lunar_month": 10, "lunar_day": "二十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 29, "lunar_month": 10, "lunar_day": "廿一", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 30, "lunar_month": 10, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}, null, null, null, null, null, null]], "today_lunar": {"month": 9, "day": 23, "year": 2026}}, {"year": 2026, "month": 12, "calendar": [[null, {"day": 1, "lunar_month": 10, "lunar_day": "廿三", "is_leap": false, "is_today": true, "is_clickable": false}, {"day": 2, "lunar_month": 10, "lunar_day": "廿四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 3, "lunar_month": 10, "lunar_day": "廿五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 4, "lunar_month": 10, "lunar_day": "廿六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 5, "lunar_month": 10, "lunar_day": "廿七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 6, "lunar_month": 10, "lunar_day": "廿八", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 7, "lunar_month": 10, "lunar_day": "廿九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 8, "lunar_month": 10, "lunar_day": "三十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 9, "lunar_month": 11, "lunar_day": "初一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 10, "lunar_month": 11, "lunar_day": "初二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 11, "lunar_month": 11, "lunar_day": "初三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 12, "lunar_month": 11, "lunar_day": "初四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 13, "lunar_month": 11, "lunar_day": "初五", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 14, "lunar_month": 11, "lunar_day": "初六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 15, "lunar_month": 11, "lunar_day": "初七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 16, "lunar_month": 11, "lunar_day": "初八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 17, "lunar_month": 11, "lunar_day": "初九", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 18, "lunar_month": 11, "lunar_day": "初十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 19, "lunar_month": 11, "lunar_day": "十一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 20, "lunar_month": 11, "lunar_day": "十二", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 21, "lunar_month": 11, "lunar_day": "十三", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 22, "lunar_month": 11, "lunar_day": "十四", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 23, "lunar_month": 11, "lunar_day": "十五", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 24, "lunar_month": 11, "lunar_day": "十六", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 25, "lunar_month": 11, "lunar_day": "十七", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 26, "lunar_month": 11, "lunar_day": "十八", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 27, "lunar_month": 11, "lunar_day": "十九", "is_leap": false, "is_today": false, "is_clickable": false}], [{"day": 28, "lunar_month": 11, "lunar_day": "二十", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 29, "lunar_month": 11, "lunar_day": "廿一", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 30, "lunar_month": 11, "lunar_day": "廿二", "is_leap": false, "is_today": false, "is_clickable": false}, {"day": 31, "lunar_month": 11, "lunar_day": "廿三", "is_leap": false, "is_today": false, "is_clickable": false}, null, null, null]], "today_lunar": {"month": 10, "day": 23, "year": 2026}}];
+        let currentMonthIndex = 0;
+        const urlPrefix = "";
+
+        function toggleCalendar() {
+            const dropdown = document.getElementById('calendar-dropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        function navigateToDate(url) {
+            window.location.href = url;
+        }
+
+        function changeMonth(direction) {
+            currentMonthIndex += direction;
+
+            // Boundary check (0 = January 2026, 11 = December 2026)
+            if (currentMonthIndex < 0) {
+                currentMonthIndex = 0;
+                return;
+            }
+            if (currentMonthIndex >= allMonthsData.length) {
+                currentMonthIndex = allMonthsData.length - 1;
+                return;
+            }
+
+            renderCalendar(currentMonthIndex);
+        }
+
+        function renderCalendar(monthIndex) {
+            const monthData = allMonthsData[monthIndex];
+            const year = monthData.year;
+            const month = monthData.month;
+
+            // Update header
+            document.getElementById('calendar-month-year').textContent = year + '年' + month + '月';
+
+            // Generate calendar HTML
+            let calendarHTML = '';
+            const today = new Date();
+            const todayYear = today.getFullYear();
+            const todayMonth = today.getMonth() + 1;
+            const todayDay = today.getDate();
+
+            monthData.calendar.forEach(week => {
+                calendarHTML += '<div class="calendar-week">';
+                week.forEach(dayData => {
+                    if (dayData === null) {
+                        calendarHTML += '<div class="calendar-day empty"></div>';
+                    } else {
+                        const isToday = (year === todayYear && month === todayMonth && dayData.day === todayDay);
+                        const todayClass = isToday ? ' today' : '';
+                        const disabledClass = dayData.is_clickable ? '' : ' disabled';
+
+                        const dateStr = year + '-' + String(month).padStart(2, '0') + '-' + String(dayData.day).padStart(2, '0');
+                        const onclick = dayData.is_clickable ?
+                            'onclick="navigateToDate(\'' + urlPrefix + dateStr + '.html\')"' : '';
+
+                        calendarHTML += '<div class="calendar-day' + todayClass + disabledClass + '" ' + onclick + '>';
+                        calendarHTML += '<div class="solar-day">' + dayData.day + '</div>';
+                        calendarHTML += '<div class="lunar-day">' + dayData.lunar_day + '</div>';
+                        calendarHTML += '</div>';
+                    }
+                });
+                calendarHTML += '</div>';
+            });
+
+            // Update calendar grid
+            const calendarContainer = document.querySelector('.calendar-dropdown');
+            const weekdaysDiv = calendarContainer.querySelector('.calendar-weekdays');
+
+            // Remove old calendar weeks
+            const oldWeeks = calendarContainer.querySelectorAll('.calendar-week');
+            oldWeeks.forEach(week => week.remove());
+
+            // Insert new calendar after weekdays
+            weekdaysDiv.insertAdjacentHTML('afterend', calendarHTML);
+        }
+
+        // Close calendar when clicking outside
+        document.addEventListener('click', function(event) {
+            const container = document.querySelector('.calendar-container');
+            if (container && !container.contains(event.target)) {
+                const dropdown = document.getElementById('calendar-dropdown');
+                if (dropdown) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        });
+    
     </script>
 </body>
 </html>

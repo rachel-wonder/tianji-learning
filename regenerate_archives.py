@@ -52,7 +52,8 @@ async def regenerate_archive_file(date_str, modules):
         total_num=total_num,
         archived_dates=archived_dates,
         today_date=date_str,
-        enhanced_content=enhanced_content
+        enhanced_content=enhanced_content,
+        is_archive_page=True
     )
 
     # Save to archive
