@@ -41,7 +41,7 @@ def calculate_daily_module(modules, start_date=START_DATE):
     return modules[module_index], module_index + 1, len(modules)
 
 
-def get_archived_dates(archive_path=ARCHIVE_PATH):
+def get_archived_dates(archive_path=ARCHIVE_PATH, is_archive_page=False):
     """Get list of archived dates for the dropdown."""
     archive_dir = Path(archive_path)
     if not archive_dir.exists():
@@ -52,10 +52,12 @@ def get_archived_dates(archive_path=ARCHIVE_PATH):
         date_str = file.stem
         try:
             date_obj = datetime.fromisoformat(date_str)
+            # Use relative path for archive pages, full path for main page
+            url_prefix = "" if is_archive_page else "archive/"
             dates.append({
                 "date": date_str,
                 "display": date_obj.strftime("%Y年%m月%d日"),
-                "url": f"archive/{date_str}.html"
+                "url": f"{url_prefix}{date_str}.html"
             })
         except ValueError:
             continue
@@ -995,26 +997,39 @@ async def main():
     enhanced_content = await generate_enhanced_content(module, current_num, total_num)
     print("AI增强内容生成完成")
 
-    # Get archived dates
-    archived_dates = get_archived_dates()
-    print(f"已找到 {len(archived_dates)} 个历史记录")
+    # Get archived dates for main page (with archive/ prefix)
+    archived_dates_main = get_archived_dates(is_archive_page=False)
+    print(f"已找到 {len(archived_dates_main)} 个历史记录")
 
-    # Generate HTML with enhanced content
+    # Generate HTML for main page
     print("\n正在生成HTML页面...")
-    html_content = generate_html(
+    html_content_main = generate_html(
         module=module,
         current_num=current_num,
         total_num=total_num,
-        archived_dates=archived_dates,
+        archived_dates=archived_dates_main,
         today_date=today_str,
         enhanced_content=enhanced_content
     )
 
     # Save main page
-    save_html(html_content, OUTPUT_PATH)
+    save_html(html_content_main, OUTPUT_PATH)
 
-    # Archive today's question
-    archive_today(html_content)
+    # Get archived dates for archive page (without archive/ prefix)
+    archived_dates_archive = get_archived_dates(is_archive_page=True)
+
+    # Generate HTML for archive page with corrected URLs
+    html_content_archive = generate_html(
+        module=module,
+        current_num=current_num,
+        total_num=total_num,
+        archived_dates=archived_dates_archive,
+        today_date=today_str,
+        enhanced_content=enhanced_content
+    )
+
+    # Archive today's question with corrected URLs
+    archive_today(html_content_archive)
 
     # Generate archive index page
     print("\n正在生成历史记录索引页面...")
