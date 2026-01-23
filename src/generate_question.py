@@ -165,7 +165,9 @@ def parse_prompt_template(template):
 def generate_html(module, current_num, total_num, archived_dates, today_date, enhanced_content):
     """Generate HTML content with enhanced AI-generated content."""
 
-    today_display = datetime.now().strftime("%Y年%m月%d日")
+    # Use the provided today_date parameter instead of datetime.now()
+    date_obj = datetime.fromisoformat(today_date)
+    today_display = date_obj.strftime("%Y年%m月%d日")
     progress_percent = int((current_num / total_num) * 100)
     generation_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
