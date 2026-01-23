@@ -1,4 +1,5 @@
 # Claude Agent SDK for AI-powered content generation
 claude-code-sdk>=0.0.25
 
-# No other dependencies needed - SDK handles everything
+# Lunar calendar for Chinese calendar calculations
+lunarcalendar>=0.0.9

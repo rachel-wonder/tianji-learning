@@ -107,17 +107,6 @@
             font-size: 0.75rem;
         }
         .ai-tip-content { margin-top: 8px; color: var(--color-secondary); }
-        .motivation {
-            font-family: 'Noto Serif SC', serif;
-            font-style: italic;
-            text-align: center;
-            color: var(--color-primary);
-            padding: 16px;
-            margin-bottom: 24px;
-            border-left: 3px solid var(--color-accent);
-            border-right: 3px solid var(--color-accent);
-            background: var(--color-surface);
-        }
         .progress-section { margin-bottom: 32px; }
         .progress-header {
             display: flex;
@@ -319,7 +308,7 @@
             background: white;
             font-size: 0.9rem;
             cursor: pointer;
-            width: 160px;
+            width: 200px;
             height: 40px;
             transition: all 0.2s ease;
             appearance: none;
@@ -368,7 +357,7 @@
             .question-text { font-size: 1.1rem; padding: 16px; }
             .card-header, .card-body { padding: 20px; }
             .module-meta { flex-direction: column; gap: 8px; }
-            .archive-select { width: 120px; }
+            .archive-select { width: 180px; }
             .archive-btn { width: 120px; }
         }
     </style>
@@ -383,15 +372,13 @@
             <div class="header-nav">
                 <a href="archive/index.html" class="archive-btn">📚 历史记录</a>
                 <select class="archive-select" onchange="goToArchive(this.value)">
-                    <option value="">📅 2026年01月21日</option>
-                    <option value="2026-01-23.html">2026年01月23日</option>
-<option value="2026-01-22.html">2026年01月22日</option>
+                    <option value="">📅 2026/01/21</option>
+                    <option value="2026-01-23.html">2026/01/23</option>
+<option value="2026-01-22.html">2026/01/22</option>
 
                 </select>
             </div>
         </header>
-
-        <div class="motivation">「学无止境，温故知新。」</div>
 
         <div class="ai-tip">
             <div class="ai-tip-content">
@@ -483,7 +470,7 @@
         </div>
 
         <footer>
-            <p>基于费曼学习法设计 · 生成于 2026-01-23 11:50:28</p>
+            <p>基于费曼学习法设计 · 生成于 2026-01-23 12:32:40</p>
             <div class="powered-by">🤖 Powered by Claude Agent SDK</div>
         </footer>
     </div>

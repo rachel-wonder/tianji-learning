@@ -56,7 +56,7 @@ def get_archived_dates(archive_path=ARCHIVE_PATH, is_archive_page=False):
             url_prefix = "" if is_archive_page else "archive/"
             dates.append({
                 "date": date_str,
-                "display": date_obj.strftime("%Y年%m月%d日"),
+                "display": date_obj.strftime("%Y/%m/%d"),
                 "url": f"{url_prefix}{date_str}.html"
             })
         except ValueError:
@@ -167,7 +167,7 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
 
     # Use the provided today_date parameter instead of datetime.now()
     date_obj = datetime.fromisoformat(today_date)
-    today_display = date_obj.strftime("%Y年%m月%d日")
+    today_display = date_obj.strftime("%Y/%m/%d")
     progress_percent = int((current_num / total_num) * 100)
     generation_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -295,17 +295,6 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
             font-size: 0.75rem;
         }}
         .ai-tip-content {{ margin-top: 8px; color: var(--color-secondary); }}
-        .motivation {{
-            font-family: 'Noto Serif SC', serif;
-            font-style: italic;
-            text-align: center;
-            color: var(--color-primary);
-            padding: 16px;
-            margin-bottom: 24px;
-            border-left: 3px solid var(--color-accent);
-            border-right: 3px solid var(--color-accent);
-            background: var(--color-surface);
-        }}
         .progress-section {{ margin-bottom: 32px; }}
         .progress-header {{
             display: flex;
@@ -507,7 +496,7 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
             background: white;
             font-size: 0.9rem;
             cursor: pointer;
-            width: 160px;
+            width: 200px;
             height: 40px;
             transition: all 0.2s ease;
             appearance: none;
@@ -556,7 +545,7 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
             .question-text {{ font-size: 1.1rem; padding: 16px; }}
             .card-header, .card-body {{ padding: 20px; }}
             .module-meta {{ flex-direction: column; gap: 8px; }}
-            .archive-select {{ width: 120px; }}
+            .archive-select {{ width: 180px; }}
             .archive-btn {{ width: 120px; }}
         }}
     </style>
@@ -576,8 +565,6 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
                 </select>
             </div>
         </header>
-
-        <div class="motivation">「{enhanced_content.get('motivation', '学无止境，温故知新。')}」</div>
 
         <div class="ai-tip">
             <div class="ai-tip-content">
