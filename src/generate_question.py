@@ -171,10 +171,12 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
     progress_percent = int((current_num / total_num) * 100)
     generation_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # Build archive options HTML
+    # Build archive options HTML (exclude current date since it's shown as default)
     archive_options = ""
     for item in archived_dates:
-        archive_options += f'<option value="{item["url"]}">{item["display"]}</option>\n'
+        # Skip the current date to avoid duplication
+        if item["date"] != today_date:
+            archive_options += f'<option value="{item["url"]}">{item["display"]}</option>\n'
 
     # Build concepts HTML
     concepts_html = ""
@@ -272,11 +274,6 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
             font-size: 0.85rem;
             color: var(--color-text-light);
             margin: 0;
-        }}
-        .date-display {{
-            font-size: 0.85rem;
-            color: var(--color-text-light);
-            margin-top: 4px;
         }}
         .ai-tip {{
             background: linear-gradient(135deg, #e8f4f8, #f0f8ff);
@@ -570,12 +567,11 @@ def generate_html(module, current_num, total_num, archived_dates, today_date, en
             <div class="header-left">
                 <h1 class="site-title">天纪每日学习</h1>
                 <p class="site-subtitle">倪海厦天纪课程 · 费曼学习法 · Claude AI增强</p>
-                <div class="date-display">{today_display}</div>
             </div>
             <div class="header-nav">
                 <a href="archive/index.html" class="archive-btn">📚 历史记录</a>
                 <select class="archive-select" onchange="goToArchive(this.value)">
-                    <option value="">📅 选择日期</option>
+                    <option value="">📅 {today_display}</option>
                     {archive_options}
                 </select>
             </div>
