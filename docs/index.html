@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
         :root {
             --color-primary: #8B4513;
@@ -34,7 +35,7 @@
             background-color: var(--color-background);
             min-height: 100vh;
         }
-        .container { max-width: 800px; margin: 0 auto; padding: 24px 20px 48px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px 20px 48px; }
         header {
             text-align: center;
             margin-bottom: 32px;
@@ -107,7 +108,10 @@
         }
         .meta-item { display: flex; align-items: center; gap: 6px; }
         .card-body { padding: 28px; }
-        .question-section { margin-bottom: 28px; }
+        .question-section {
+            margin-bottom: 28px;
+            width: 100%;
+        }
         .section-label {
             font-size: 0.85rem;
             color: var(--color-accent);
@@ -208,6 +212,103 @@
         }
         .prompt-static {
             margin: 8px 0;
+        }
+        .learning-materials {
+            margin-bottom: 28px;
+        }
+        .learning-sources {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 16px;
+        }
+        .source-panel {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 0;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            background: #000;
+            border-radius: var(--radius-sm);
+        }
+        #youtube-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .pdf-container {
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            overflow: auto;
+            background: #525659;
+        }
+        #pdf-canvas {
+            display: block;
+            margin: 0 auto;
+        }
+        #text-layer {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            line-height: 1.0;
+            margin: 0 auto;
+        }
+        #text-layer > span {
+            color: transparent;
+            position: absolute;
+            white-space: pre;
+            cursor: text;
+            transform-origin: 0% 0%;
+        }
+        #text-layer .highlight {
+            background-color: rgba(255, 255, 0, 0.25) !important;
+            color: transparent !important;
+            box-shadow: 0 0 3px rgba(255, 255, 0, 0.4);
+        }
+        .pdf-controls {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .pdf-controls button {
+            padding: 6px 12px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+        .pdf-controls button:hover {
+            background: var(--color-primary-light);
+        }
+        .pdf-controls button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .pdf-controls span {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
         }
         .resources-section {
             display: grid;
@@ -383,6 +484,60 @@
             color: rgba(255,255,255,0.8);
         }
     
+        .complete-materials {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin-top: 40px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .complete-materials h3 {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .material-card {
+            background: var(--color-background);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 32px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: all 0.3s ease;
+        }
+
+        .material-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .material-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .material-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .material-detail {
+            font-size: 1rem;
+            color: var(--color-text-light);
+        }
+
         footer {
             text-align: center;
             padding-top: 32px;
@@ -558,11 +713,11 @@
                     <div class="solar-day">26</div>
                     <div class="lunar-day">初八</div>
                 </div>
-                <div class="calendar-day disabled" >
+                <div class="calendar-day" onclick="navigateToDate('archive/2026-01-27.html')">
                     <div class="solar-day">27</div>
                     <div class="lunar-day">初九</div>
                 </div>
-                <div class="calendar-day disabled" >
+                <div class="calendar-day" onclick="navigateToDate('archive/2026-01-28.html')">
                     <div class="solar-day">28</div>
                     <div class="lunar-day">初十</div>
                 </div>
@@ -586,36 +741,43 @@
             <div class="card-body">
                 <div class="question-section">
                     <div class="section-label">今日一问</div>
-                    <div class="question-text">什么是紫微斗数？它与其他命理学（如八字）有什么本质区别？</div>
+                    <div class="question-text">如何用"神"去看问题？以姓名学为例</div>
                 </div>
 
-                <div class="question-section">
+                <div class="learning-materials">
                     <div class="section-label">学习材料</div>
-                    <div class="resources-section">
-                        <a href="https://www.youtube.com/watch?v=jJMWFi0nJ6c&list=PLba-X8Aih0CCLzEeoICOx7qzkvjjCJt0G" target="_blank" rel="noopener" class="resource-link">
-                            <span class="resource-icon">🎬</span>
-                            <div class="resource-info">
-                                <div class="resource-title">观看视频</div>
-                                <div class="resource-detail">天纪第 1-3 集</div>
+                    <div class="learning-sources">
+                        <!-- Video Player Panel -->
+                        <div class="source-panel">
+                            <div class="video-container">
+                                <div id="youtube-player"></div>
                             </div>
-                        </a>
-                        <a href="天机道教材.pdf" target="_blank" rel="noopener" class="resource-link">
-                            <span class="resource-icon">📖</span>
-                            <div class="resource-info">
-                                <div class="resource-title">阅读教材</div>
-                                <div class="resource-detail">天机道 第 1-15 页</div>
+                        </div>
+
+                        <!-- PDF Reader Panel -->
+                        <div class="source-panel">
+                            <div class="pdf-container">
+                                <canvas id="pdf-canvas"></canvas>
+                                <div id="text-layer"></div>
                             </div>
-                        </a>
+                            <div class="pdf-controls">
+                                <button id="prev-page">上一页</button>
+                                <span>第 <span id="page-num"></span> 页 / 共 <span id="page-count"></span> 页</span>
+                                <button id="next-page">下一页</button>
+                                <button id="zoom-in">放大</button>
+                                <button id="zoom-out">缩小</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="concepts-section">
                     <div class="section-label">核心概念</div>
                     <div class="concepts-grid">
-                        <span class="concept-tag">紫微斗数起源</span>
-<span class="concept-tag">十二宫位</span>
-<span class="concept-tag">主星与辅星</span>
-<span class="concept-tag">命盘结构</span>
+                        <span class="concept-tag">正名</span>
+<span class="concept-tag">知识演进</span>
+<span class="concept-tag">计算机发展</span>
+<span class="concept-tag">科技进步</span>
 <span class="concept-tag">与八字的区别</span>
 
                     </div>
@@ -641,6 +803,23 @@
 - 视频：天纪第1-3集
 - 教材：天机道第1-15页</div></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Complete Materials Section -->
+        <div class="complete-materials">
+            <h3>📚 完整资料</h3>
+            <div class="materials-grid">
+                <a href="https://www.youtube.com/watch?v=jJMWFi0nJ6c&list=PLba-X8Aih0CCLzEeoICOx7qzkvjjCJt0G" target="_blank" class="material-card">
+                    <div class="material-icon">🎬</div>
+                    <div class="material-title">观看视频</div>
+                    <div class="material-detail">天纪第 1-3 集</div>
+                </a>
+                <a href="天机道教材.pdf" target="_blank" class="material-card">
+                    <div class="material-icon">📖</div>
+                    <div class="material-title">阅读教材</div>
+                    <div class="material-detail">天机道 第 1-15 页</div>
+                </a>
             </div>
         </div>
 
@@ -714,6 +893,8 @@
         }
 
         function navigateToDate(url) {
+            console.log('Navigating to:', url);
+            console.log('Full URL will be:', window.location.origin + '/' + url);
             window.location.href = url;
         }
 
@@ -793,7 +974,241 @@
                 }
             }
         });
-    
+
+        // ===== Video and PDF Player Configuration =====
+        const PLAYER_CONFIG = {
+            video: {
+                videoId: 'jJMWFi0nJ6c',
+                startTime: 511,
+                endTime: 720
+            },
+            pdf: {
+                url: '【倪注繁体横排文字版】倪海厦-天纪-人间道.pdf',
+                targetPage: 6,
+                scale: 1.5,
+                highlightText: '[无直接对应内容 - 这是倪师用计算机发展举例说明知识演进过程]'
+            }
+        };
+
+        // Global variables
+        let player;
+        let checkInterval;
+        let pdfDoc = null;
+        let pageNum = 1;
+        let pageRendering = false;
+        let pageNumPending = null;
+        let scale = PLAYER_CONFIG.pdf.scale;
+
+        // Load YouTube IFrame API
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // YouTube IFrame API Ready Callback
+        function onYouTubeIframeAPIReady() {
+            console.log('YouTube IFrame API Ready');
+            console.log('Looking for element: youtube-player');
+            const element = document.getElementById('youtube-player');
+            console.log('Element found:', element);
+
+            player = new YT.Player('youtube-player', {
+                height: '100%',
+                width: '100%',
+                videoId: PLAYER_CONFIG.video.videoId,
+                playerVars: {
+                    'start': PLAYER_CONFIG.video.startTime,
+                    'autoplay': 0,
+                    'controls': 1,
+                    'modestbranding': 1,
+                    'rel': 0
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            console.log('YouTube player ready');
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                startTimeCheck();
+            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                stopTimeCheck();
+            }
+        }
+
+        function startTimeCheck() {
+            stopTimeCheck();
+            checkInterval = setInterval(() => {
+                const currentTime = player.getCurrentTime();
+                if (currentTime >= PLAYER_CONFIG.video.endTime) {
+                    player.pauseVideo();
+                    stopTimeCheck();
+                }
+            }, 100);
+        }
+
+        function stopTimeCheck() {
+            if (checkInterval) {
+                clearInterval(checkInterval);
+                checkInterval = null;
+            }
+        }
+
+        // PDF.js Configuration - Wait for DOM to load
+        document.addEventListener('DOMContentLoaded', function() {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+            const canvas = document.getElementById('pdf-canvas');
+            const ctx = canvas.getContext('2d');
+            const textLayerDiv = document.getElementById('text-layer');
+
+            // Load PDF
+            pdfjsLib.getDocument(PLAYER_CONFIG.pdf.url).promise.then(function(pdfDoc_) {
+                pdfDoc = pdfDoc_;
+                document.getElementById('page-count').textContent = pdfDoc.numPages;
+                pageNum = PLAYER_CONFIG.pdf.targetPage;
+                renderPage(pageNum);
+            });
+
+            function renderPage(num) {
+            pageRendering = true;
+            pdfDoc.getPage(num).then(function(page) {
+                const outputScale = 2.0;
+                const viewport = page.getViewport({ scale: scale });
+                const scaledViewport = page.getViewport({ scale: scale * outputScale });
+
+                canvas.height = scaledViewport.height;
+                canvas.width = scaledViewport.width;
+                canvas.style.width = viewport.width + 'px';
+                canvas.style.height = viewport.height + 'px';
+
+                textLayerDiv.style.width = viewport.width + 'px';
+                textLayerDiv.style.height = viewport.height + 'px';
+
+                const renderContext = {
+                    canvasContext: ctx,
+                    viewport: scaledViewport
+                };
+
+                const renderTask = page.render(renderContext);
+
+                renderTask.promise.then(function() {
+                    return page.getTextContent();
+                }).then(function(textContent) {
+                    textLayerDiv.innerHTML = '';
+                    renderTextLayer(textContent, viewport, num);
+                    pageRendering = false;
+                    if (pageNumPending !== null) {
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
+                });
+            });
+            document.getElementById('page-num').textContent = num;
+        }
+
+        function renderTextLayer(textContent, viewport, pageNum) {
+            textContent.items.forEach((item) => {
+                const tx = pdfjsLib.Util.transform(viewport.transform, item.transform);
+                const span = document.createElement('span');
+                span.textContent = item.str;
+                span.style.position = 'absolute';
+                span.style.left = tx[4] + 'px';
+                span.style.top = (tx[5] - item.height) + 'px';
+                span.style.fontSize = Math.sqrt(tx[2] * tx[2] + tx[3] * tx[3]) + 'px';
+                span.style.fontFamily = item.fontName || 'sans-serif';
+                span.style.whiteSpace = 'pre';
+                span.style.color = 'transparent';
+                textLayerDiv.appendChild(span);
+            });
+
+            if (pageNum === PLAYER_CONFIG.pdf.targetPage) {
+                setTimeout(() => { highlightText(); }, 100);
+            }
+        }
+
+        function queueRenderPage(num) {
+            if (pageRendering) {
+                pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+
+        // PDF Navigation Controls
+        document.getElementById('prev-page').addEventListener('click', function() {
+            if (pageNum <= 1) return;
+            pageNum--;
+            queueRenderPage(pageNum);
+        });
+
+        document.getElementById('next-page').addEventListener('click', function() {
+            if (pageNum >= pdfDoc.numPages) return;
+            pageNum++;
+            queueRenderPage(pageNum);
+        });
+
+        document.getElementById('zoom-in').addEventListener('click', function() {
+            scale += 0.25;
+            queueRenderPage(pageNum);
+        });
+
+        document.getElementById('zoom-out').addEventListener('click', function() {
+            if (scale <= 0.5) return;
+            scale -= 0.25;
+            queueRenderPage(pageNum);
+        });
+
+        // Highlight text function
+        function highlightText() {
+            const searchText = PLAYER_CONFIG.pdf.highlightText;
+            const spans = textLayerDiv.querySelectorAll('span');
+
+            if (spans.length === 0) return;
+
+            let fullText = '';
+            const spanMap = [];
+
+            spans.forEach((span) => {
+                const text = span.textContent;
+                spanMap.push({
+                    element: span,
+                    start: fullText.length,
+                    end: fullText.length + text.length
+                });
+                fullText += text;
+            });
+
+            let searchIndex = fullText.indexOf(searchText);
+
+            if (searchIndex === -1) {
+                const normalizeText = (text) => text.replace(/[\s\[\]]/g, '');
+                const normalizedSearch = normalizeText(searchText);
+                const normalizedFull = normalizeText(fullText);
+                const normalizedIndex = normalizedFull.indexOf(normalizedSearch);
+                if (normalizedIndex !== -1) {
+                    searchIndex = normalizedIndex;
+                }
+            }
+
+            if (searchIndex !== -1) {
+                const searchEnd = searchIndex + searchText.length;
+                spanMap.forEach(item => {
+                    if (item.start < searchEnd && item.end > searchIndex) {
+                        item.element.classList.add('highlight');
+                    }
+                });
+            }
+        }
+
+        }); // End of DOMContentLoaded
+
     </script>
 </body>
 </html>
